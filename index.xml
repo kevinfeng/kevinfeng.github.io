@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Kevin</title>
-    <link>https://github.com/kevinfeng/</link>
+    <link>https://kevinfeng.github.io/</link>
     <description>Recent content on Kevin</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Thu, 25 Jul 2019 11:32:27 +0800</lastBuildDate>
     
-        <atom:link href="https://github.com/kevinfeng/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://kevinfeng.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>About</title>
-      <link>https://github.com/kevinfeng/about/</link>
+      <link>https://kevinfeng.github.io/about/</link>
       <pubDate>Sun, 20 Aug 2017 21:38:52 +0800</pubDate>
       
-      <guid>https://github.com/kevinfeng/about/</guid>
+      <guid>https://kevinfeng.github.io/about/</guid>
       
         <description>&lt;p&gt;A programmer focus on cloud native related stuff.&lt;/p&gt;
 
@@ -27,10 +27,10 @@
     
     <item>
       <title>Docker Registry Authentication</title>
-      <link>https://github.com/kevinfeng/post/docker-registry-authentication/</link>
+      <link>https://kevinfeng.github.io/post/docker-registry-authentication/</link>
       <pubDate>Thu, 25 Jul 2019 11:32:27 +0800</pubDate>
       
-      <guid>https://github.com/kevinfeng/post/docker-registry-authentication/</guid>
+      <guid>https://kevinfeng.github.io/post/docker-registry-authentication/</guid>
       
         <description>
 

@@ -35,15 +35,11 @@
 <meta name="generator" content="Hugo 0.55.6" />
 
 
-<link rel="canonical" href="https://github.com/kevinfeng/post/docker-registry-authentication/" />
+<link rel="canonical" href="https://kevinfeng.github.io/post/docker-registry-authentication/" />
 
 
 
-<link rel="icon" href="/kevinfeng/favicon.ico" />
-
-
-
-
+<link rel="icon" href="/favicon.ico" />
 
 
 
@@ -51,7 +47,11 @@
 
 
 
-<link rel="stylesheet" href="/kevinfeng/sass/jane.min.31c4b7729c8d71cc152f8de4203d90bfd8a04f7eab69372de7234ebf55b7701b.css" integrity="sha256-McS3cpyNccwVL43kID2Qv9igT36raTct5yNOv1W3cBs=" media="screen" crossorigin="anonymous">
+
+
+
+
+<link rel="stylesheet" href="/sass/jane.min.31c4b7729c8d71cc152f8de4203d90bfd8a04f7eab69372de7234ebf55b7701b.css" integrity="sha256-McS3cpyNccwVL43kID2Qv9igT36raTct5yNOv1W3cBs=" media="screen" crossorigin="anonymous">
 
 
 
@@ -60,7 +60,7 @@
 <meta property="og:title" content="Docker Registry Authentication" />
 <meta property="og:description" content="docker registry 认证流程 参考： https://docs.docker.com/registry/spec/auth/token/ 最近在使用harbor的过程中，定位了一个docker认证相关的问题，期间因为对docker registry的认证流程不" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://github.com/kevinfeng/post/docker-registry-authentication/" />
+<meta property="og:url" content="https://kevinfeng.github.io/post/docker-registry-authentication/" />
 <meta property="article:published_time" content="2019-07-25T11:32:27&#43;08:00"/>
 <meta property="article:modified_time" content="2019-07-25T11:32:27&#43;08:00"/>
 
@@ -95,7 +95,7 @@
 <body>
   <div id="mobile-navbar" class="mobile-navbar">
   <div class="mobile-header-logo">
-    <a href="/kevinfeng/" class="logo">Jane</a>
+    <a href="/" class="logo">Jane</a>
   </div>
   <div class="mobile-navbar-icon">
     <span></span>
@@ -109,35 +109,35 @@
         
           
           
-            <a class="menu-item-link" href="https://github.com/kevinfeng/">This is Home</a>
+            <a class="menu-item-link" href="https://kevinfeng.github.io/">This is Home</a>
           
         
       </li><li class="mobile-menu-item">
         
           
           
-            <a class="menu-item-link" href="https://github.com/kevinfeng/post/">Archives</a>
+            <a class="menu-item-link" href="https://kevinfeng.github.io/post/">Archives</a>
           
         
       </li><li class="mobile-menu-item">
         
           
           
-            <a class="menu-item-link" href="https://github.com/kevinfeng/tags/">Tags</a>
+            <a class="menu-item-link" href="https://kevinfeng.github.io/tags/">Tags</a>
           
         
       </li><li class="mobile-menu-item">
         
           
           
-            <a class="menu-item-link" href="https://github.com/kevinfeng/categories/">Categories</a>
+            <a class="menu-item-link" href="https://kevinfeng.github.io/categories/">Categories</a>
           
         
       </li><li class="mobile-menu-item">
         
           
           
-            <a class="menu-item-link" href="https://github.com/kevinfeng/about/">About</a>
+            <a class="menu-item-link" href="https://kevinfeng.github.io/about/">About</a>
           
         
       </li><li class="mobile-menu-item">
@@ -175,8 +175,8 @@
 
 
 
-  <link rel="stylesheet" href="/kevinfeng/lib/photoswipe/photoswipe.min.css" />
-  <link rel="stylesheet" href="/kevinfeng/lib/photoswipe/default-skin/default-skin.min.css" />
+  <link rel="stylesheet" href="/lib/photoswipe/photoswipe.min.css" />
+  <link rel="stylesheet" href="/lib/photoswipe/default-skin/default-skin.min.css" />
 
 
 
@@ -233,7 +233,7 @@
 
   <header id="header" class="header container">
     <div class="logo-wrapper">
-  <a href="/kevinfeng/" class="logo">
+  <a href="/" class="logo">
     
       Jane
     
@@ -248,7 +248,7 @@
         
           
           
-            <a class="menu-item-link" href="https://github.com/kevinfeng/">This is Home</a>
+            <a class="menu-item-link" href="https://kevinfeng.github.io/">This is Home</a>
           
 
         
@@ -259,7 +259,7 @@
         
           
           
-            <a class="menu-item-link" href="https://github.com/kevinfeng/post/">Archives</a>
+            <a class="menu-item-link" href="https://kevinfeng.github.io/post/">Archives</a>
           
 
         
@@ -270,7 +270,7 @@
         
           
           
-            <a class="menu-item-link" href="https://github.com/kevinfeng/tags/">Tags</a>
+            <a class="menu-item-link" href="https://kevinfeng.github.io/tags/">Tags</a>
           
 
         
@@ -281,7 +281,7 @@
         
           
           
-            <a class="menu-item-link" href="https://github.com/kevinfeng/categories/">Categories</a>
+            <a class="menu-item-link" href="https://kevinfeng.github.io/categories/">Categories</a>
           
 
         
@@ -292,7 +292,7 @@
         
           
           
-            <a class="menu-item-link" href="https://github.com/kevinfeng/about/">About</a>
+            <a class="menu-item-link" href="https://kevinfeng.github.io/about/">About</a>
           
 
         
@@ -346,7 +346,7 @@
           2019-07-25
         </time>
         <div class="post-category">
-            <a href="https://github.com/kevinfeng/categories/docker/"> docker </a>
+            <a href="https://kevinfeng.github.io/categories/docker/"> docker </a>
             
           </div>
         
@@ -478,7 +478,7 @@ Strict-Transport-Security: max-age=31536000
 
     <footer class="post-footer">
       <div class="post-tags">
-          <a href="https://github.com/kevinfeng/tags/docker/">docker</a>
+          <a href="https://kevinfeng.github.io/tags/docker/">docker</a>
           
         </div>
 
@@ -539,7 +539,7 @@ Strict-Transport-Security: max-age=31536000
     </a>
 
 
-<a href="https://github.com/kevinfeng/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+<a href="https://kevinfeng.github.io/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
     class="iconfont" title="rss" target="_blank">
     <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
   xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -602,13 +602,13 @@ Strict-Transport-Security: max-age=31536000
     </div>
   </div>
   
-<script type="text/javascript" src="/kevinfeng/lib/jquery/jquery-3.2.1.min.js"></script>
-  <script type="text/javascript" src="/kevinfeng/lib/slideout/slideout-1.0.1.min.js"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
 
 
 
 
-<script type="text/javascript" src="/kevinfeng/js/main.638251f4230630f0335d8c6748e53a96f94b72670920b60c09a56fdc8bece214.js" integrity="sha256-Y4JR9CMGMPAzXYxnSOU6lvlLcmcJILYMCaVv3Ivs4hQ=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/js/main.638251f4230630f0335d8c6748e53a96f94b72670920b60c09a56fdc8bece214.js" integrity="sha256-Y4JR9CMGMPAzXYxnSOU6lvlLcmcJILYMCaVv3Ivs4hQ=" crossorigin="anonymous"></script>
 
 
 
@@ -616,9 +616,9 @@ Strict-Transport-Security: max-age=31536000
 
 
   
-    <script type="text/javascript" src="/kevinfeng/js/load-photoswipe.js"></script>
-    <script type="text/javascript" src="/kevinfeng/lib/photoswipe/photoswipe.min.js"></script>
-    <script type="text/javascript" src="/kevinfeng/lib/photoswipe/photoswipe-ui-default.min.js"></script>
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe.min.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe-ui-default.min.js"></script>
   
 
 

@@ -1,2 +1,2 @@
 User-agent: *
-Sitemap: https://github.com/kevinfeng/sitemap.xml
+Sitemap: https://kevinfeng.github.io/sitemap.xml
