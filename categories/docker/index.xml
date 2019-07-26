@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>docker on Kevin</title>
+    <link>https://github.com/kevinfeng/categories/docker/</link>
+    <description>Recent content in docker on Kevin</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 25 Jul 2019 11:32:27 +0800</lastBuildDate>
+    
+	<atom:link href="https://github.com/kevinfeng/categories/docker/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Docker Registry Authentication</title>
+      <link>https://github.com/kevinfeng/post/docker-registry-authentication/</link>
+      <pubDate>Thu, 25 Jul 2019 11:32:27 +0800</pubDate>
+      
+      <guid>https://github.com/kevinfeng/post/docker-registry-authentication/</guid>
+      <description>docker registry 认证流程 参考： https://docs.docker.com/registry/spec/auth/token/ 最近在使用harbor的过程中，定位了一个docker认证相关的问题，期间因为对docker registry的认证流程不</description>
+    </item>
+    
+  </channel>
+</rss>

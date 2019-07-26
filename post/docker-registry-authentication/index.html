@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Categories - Kevin</title>
+  <title>Docker Registry Authentication - Kevin</title>
   
 
 <meta name="renderer" content="webkit" />
@@ -23,7 +23,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 
 <meta name="author" content="kevinfeng" />
-  <meta name="description" content="Hugo theme jane example site." />
+  <meta name="description" content="docker registry 认证流程 参考： https://docs.docker.com/registry/spec/auth/token/ 最近在使用harbor的过程中，定位了一个docker认证相关的问题，期间因为对docker registry的认证流程不" />
+
   <meta name="keywords" content="Hugo, theme, jane" />
 
 
@@ -34,8 +35,7 @@
 <meta name="generator" content="Hugo 0.55.6" />
 
 
-<link rel="canonical" href="https://github.com/kevinfeng/categories/" />
-<link href="%7balternate%20%7bRSS%20application/rss&#43;xml%20%20index%20alternate%20%20false%20false%20true%20false%20false%200%7d%20/kevinfeng/categories/index.xml%20https://github.com/kevinfeng/categories/index.xml%7d" rel="alternate" type="application/rss+xml" title="Kevin" />
+<link rel="canonical" href="https://github.com/kevinfeng/post/docker-registry-authentication/" />
 
 
 
@@ -57,19 +57,27 @@
 
 
 
-<meta property="og:title" content="Categories" />
-<meta property="og:description" content="Hugo theme jane example site." />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://github.com/kevinfeng/categories/" />
+<meta property="og:title" content="Docker Registry Authentication" />
+<meta property="og:description" content="docker registry 认证流程 参考： https://docs.docker.com/registry/spec/auth/token/ 最近在使用harbor的过程中，定位了一个docker认证相关的问题，期间因为对docker registry的认证流程不" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://github.com/kevinfeng/post/docker-registry-authentication/" />
+<meta property="article:published_time" content="2019-07-25T11:32:27&#43;08:00"/>
+<meta property="article:modified_time" content="2019-07-25T11:32:27&#43;08:00"/>
 
-<meta property="og:updated_time" content="2019-07-25T11:32:27&#43;08:00"/>
+<meta itemprop="name" content="Docker Registry Authentication">
+<meta itemprop="description" content="docker registry 认证流程 参考： https://docs.docker.com/registry/spec/auth/token/ 最近在使用harbor的过程中，定位了一个docker认证相关的问题，期间因为对docker registry的认证流程不">
 
-<meta itemprop="name" content="Categories">
-<meta itemprop="description" content="Hugo theme jane example site.">
 
+<meta itemprop="datePublished" content="2019-07-25T11:32:27&#43;08:00" />
+<meta itemprop="dateModified" content="2019-07-25T11:32:27&#43;08:00" />
+<meta itemprop="wordCount" content="1142">
+
+
+
+<meta itemprop="keywords" content="docker," />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Categories"/>
-<meta name="twitter:description" content="Hugo theme jane example site."/>
+<meta name="twitter:title" content="Docker Registry Authentication"/>
+<meta name="twitter:description" content="docker registry 认证流程 参考： https://docs.docker.com/registry/spec/auth/token/ 最近在使用harbor的过程中，定位了一个docker认证相关的问题，期间因为对docker registry的认证流程不"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -269,7 +277,7 @@
 
       </li>
     
-        <li class="menu-item active">
+        <li class="menu-item">
         
           
           
@@ -328,49 +336,178 @@
     <main id="main" class="main bg-llight">
       <div class="content-wrapper">
         <div id="content" class="content container">
-          
-  
-  
-  
-  
-
-  
-  
+          <article class="post bg-white">
     
-    
-    
-    
-      <section id="archive" class="archive">
-        <div class="archive-title">
-        </div>
-          <div class="collection-title">
-            <h2 class="archive-year">
-              <a href="https://github.com/kevinfeng/categories/docker/">
-                Category: docker
-              </a>
-            </h2>
+    <header class="post-header">
+      <h1 class="post-title">Docker Registry Authentication</h1>
+      
+      <div class="post-meta">
+        <time datetime="2019-07-25" class="post-time">
+          2019-07-25
+        </time>
+        <div class="post-category">
+            <a href="https://github.com/kevinfeng/categories/docker/"> docker </a>
+            
           </div>
+        
 
-          
-            <div class="archive-post">
-              <time datetime="2019-07-25" class="archive-post-time">
-                2019-07-25
-              </time>
-              <span class="archive-post-title">
-                <a href="/kevinfeng/post/docker-registry-authentication/" class="archive-post-link">
-                  Docker Registry Authentication
-                </a>
-              </span>
-            </div>
-          
-          
-      </section>
+        
+        
+
+        
+        
+      </div>
+    </header>
+
     
     
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Table of Contents</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#docker-registry-认证流程">docker registry 认证流程</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<h1 id="docker-registry-认证流程">docker registry 认证流程</h1>
+
+<p>参考： <a href="https://docs.docker.com/registry/spec/auth/token/">https://docs.docker.com/registry/spec/auth/token/</a></p>
+
+<p>最近在使用harbor的过程中，定位了一个docker认证相关的问题，期间因为对docker registry的认证流程不熟悉，花了不少时间，这里把整个流程梳理一下。</p>
+
+<p>大部分的流程在上面给出的官方文档中已经说的比较清楚，首先看这个图: <img src="https://docs.docker.com/registry/spec/images/v2-registry-auth.png" alt="auth" /></p>
+
+<ol>
+<li><p>Docker client发起一个pull请求</p></li>
+
+<li><p>如果Registry配置了需要认证，会返回401 Unauthorized和接下来如何认证的信息</p></li>
+
+<li><p>Docker使用registry提供的认证方法获取token</p></li>
+
+<li><p>认证服务返回一个token</p></li>
+
+<li><p>Docker将token以bearer token的方式放在header中再次发起第一步的请求</p></li>
+
+<li><p>Registry对token进行验证通过后开始pull流程</p></li>
+</ol>
+
+<p>其中第二步registry的返回类似于这样：</p>
+
+<pre><code>HTTP/1.1 401 Unauthorized
+Content-Type: application/json; charset=utf-8
+Docker-Distribution-Api-Version: registry/2.0
+Www-Authenticate: Bearer realm=&quot;https://auth.docker.io/token&quot;,service=&quot;registry.docker.io&quot;,scope=&quot;repository:samalba/my-app:pull,push&quot;
+Date: Thu, 10 Sep 2015 19:32:31 GMT
+Content-Length: 235
+Strict-Transport-Security: max-age=31536000
+
+{&quot;errors&quot;:[{&quot;code&quot;:&quot;UNAUTHORIZED&quot;,&quot;message&quot;:&quot;access to the requested resource is not authorized&quot;,&quot;detail&quot;:[{&quot;Type&quot;:&quot;repository&quot;,&quot;Name&quot;:&quot;samalba/my-app&quot;,&quot;Action&quot;:&quot;pull&quot;},{&quot;Type&quot;:&quot;repository&quot;,&quot;Name&quot;:&quot;samalba/my-app&quot;,&quot;Action&quot;:&quot;push&quot;}]}]}
+</code></pre>
+
+<p>在上面这个http response中，关于接下来如何认证的信息并不是放在body中，而是在Www-Authenticate这个header里。其中realm就是认证服务的地址，service代表registry服务的提供方，scope则是本次请求涉及的权限相关信息，例子中就是对samalba/my-app这个镜像的pull和push操作请求权限认证。</p>
+
+<p>第三步请求token时要带上刚才拿到的service和scope参数：</p>
+
+<pre><code>https://auth.docker.io/token?service=registry.docker.io&amp;scope=repository:samalba/my-app:pull,push
+</code></pre>
+
+<p>看到这里其实有一点疑问，认证服务本身又是如何认证的呢？总不能谁都能发起这个请求拿到token吧，那就相当于不认证了。通过在harbor中打印日志的方式，发现docker在请求token时带着一个basicauth的header：</p>
+
+<pre><code>Authorization: Basic xxxx
+</code></pre>
+
+<p>Xxxx是一个base64编码后的字符串，编码前的格式是username:password，而这组用户名密码，其实是docker login的时候使用的。之后的流程不再赘述，完整的流程如下：</p>
+
+<ol>
+<li><p>Docker client发起一个login请求，使用basicauth的方式携带用户名密码</p></li>
+
+<li><p>Registry返回401 Unauthorized和接下来如何认证的信息</p></li>
+
+<li><p>Docker使用registry提供的认证方法获取token</p></li>
+
+<li><p>认证服务返回一个token</p></li>
+
+<li><p>docker login成功，docker将认证信息存储到本地文件</p></li>
+
+<li><p>Docker client发起一个pull请求，根据registry的地址找到存储在本地的用户名密码并以basicauth的方式携带</p></li>
+
+<li><p>Registry返回401 Unauthorized和接下来如何认证的信息</p></li>
+
+<li><p>Docker使用registry提供的认证方法获取token</p></li>
+
+<li><p>认证服务返回一个token</p></li>
+
+<li><p>Docker将token以bearer token的方式放在header中再次发起第6步的请求</p></li>
+
+<li><p>Registry对token进行验证通过后开始pull流程</p></li>
+</ol>
+
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">kevinfeng</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+      2019-07-25
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          <a href="https://github.com/kevinfeng/tags/docker/">docker</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+        
+      </nav>
+    </footer>
+  </article>
 
   
   
 
+  
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+    
 
         </div>
       </div>
