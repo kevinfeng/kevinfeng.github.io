@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Kevin</title>
+    <title>Even - A super concise theme for Hugo</title>
     <link>https://kevinfeng.github.io/</link>
-    <description>Recent content on Kevin</description>
+    <description>Recent content on Even - A super concise theme for Hugo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 25 Jul 2019 11:32:27 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 17 Oct 2019 10:46:42 +0800</lastBuildDate>
     
-        <atom:link href="https://kevinfeng.github.io/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://kevinfeng.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -17,12 +17,18 @@
       <pubDate>Sun, 20 Aug 2017 21:38:52 +0800</pubDate>
       
       <guid>https://kevinfeng.github.io/about/</guid>
+      <description>A programmer focus on cloud native related stuff.
+Find me on GitHub.</description>
+    </item>
+    
+    <item>
+      <title>Kubernetes Service Discovery in Prometheus</title>
+      <link>https://kevinfeng.github.io/post/kubernetes-sd-in-prometheus/</link>
+      <pubDate>Thu, 17 Oct 2019 10:46:42 +0800</pubDate>
       
-        <description>&lt;p&gt;A programmer focus on cloud native related stuff.&lt;/p&gt;
-
-&lt;p&gt;Find me on &lt;a href=&#34;https://github.com/kevinfeng&#34;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
-</description>
-      
+      <guid>https://kevinfeng.github.io/post/kubernetes-sd-in-prometheus/</guid>
+      <description>Prometheus seems to be the most popular monitoring system for kubernetes these days. It is impossibile for us to use static scrape targets in prometheus config for kubernetes metrics, as things varies all the time in kubernetes. That&amp;rsquo;s where service discovery comes in.
+Prometheus provides service discovery for kubernetes node, service, pod, endpoint and ingress. Take pod as example, we can pull from all the pods in kubernetes by put this in config:</description>
     </item>
     
     <item>
@@ -31,83 +37,7 @@
       <pubDate>Thu, 25 Jul 2019 11:32:27 +0800</pubDate>
       
       <guid>https://kevinfeng.github.io/post/docker-registry-authentication/</guid>
-      
-        <description>
-
-&lt;h1 id=&#34;docker-registry-认证流程&#34;&gt;docker registry 认证流程&lt;/h1&gt;
-
-&lt;p&gt;参考： &lt;a href=&#34;https://docs.docker.com/registry/spec/auth/token/&#34;&gt;https://docs.docker.com/registry/spec/auth/token/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;最近在使用harbor的过程中，定位了一个docker认证相关的问题，期间因为对docker registry的认证流程不熟悉，花了不少时间，这里把整个流程梳理一下。&lt;/p&gt;
-
-&lt;p&gt;大部分的流程在上面给出的官方文档中已经说的比较清楚，首先看这个图: &lt;img src=&#34;https://docs.docker.com/registry/spec/images/v2-registry-auth.png&#34; alt=&#34;auth&#34; /&gt;&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;Docker client发起一个pull请求&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;如果Registry配置了需要认证，会返回401 Unauthorized和接下来如何认证的信息&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Docker使用registry提供的认证方法获取token&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;认证服务返回一个token&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Docker将token以bearer token的方式放在header中再次发起第一步的请求&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Registry对token进行验证通过后开始pull流程&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;其中第二步registry的返回类似于这样：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;HTTP/1.1 401 Unauthorized
-Content-Type: application/json; charset=utf-8
-Docker-Distribution-Api-Version: registry/2.0
-Www-Authenticate: Bearer realm=&amp;quot;https://auth.docker.io/token&amp;quot;,service=&amp;quot;registry.docker.io&amp;quot;,scope=&amp;quot;repository:samalba/my-app:pull,push&amp;quot;
-Date: Thu, 10 Sep 2015 19:32:31 GMT
-Content-Length: 235
-Strict-Transport-Security: max-age=31536000
-
-{&amp;quot;errors&amp;quot;:[{&amp;quot;code&amp;quot;:&amp;quot;UNAUTHORIZED&amp;quot;,&amp;quot;message&amp;quot;:&amp;quot;access to the requested resource is not authorized&amp;quot;,&amp;quot;detail&amp;quot;:[{&amp;quot;Type&amp;quot;:&amp;quot;repository&amp;quot;,&amp;quot;Name&amp;quot;:&amp;quot;samalba/my-app&amp;quot;,&amp;quot;Action&amp;quot;:&amp;quot;pull&amp;quot;},{&amp;quot;Type&amp;quot;:&amp;quot;repository&amp;quot;,&amp;quot;Name&amp;quot;:&amp;quot;samalba/my-app&amp;quot;,&amp;quot;Action&amp;quot;:&amp;quot;push&amp;quot;}]}]}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;在上面这个http response中，关于接下来如何认证的信息并不是放在body中，而是在Www-Authenticate这个header里。其中realm就是认证服务的地址，service代表registry服务的提供方，scope则是本次请求涉及的权限相关信息，例子中就是对samalba/my-app这个镜像的pull和push操作请求权限认证。&lt;/p&gt;
-
-&lt;p&gt;第三步请求token时要带上刚才拿到的service和scope参数：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;https://auth.docker.io/token?service=registry.docker.io&amp;amp;scope=repository:samalba/my-app:pull,push
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;看到这里其实有一点疑问，认证服务本身又是如何认证的呢？总不能谁都能发起这个请求拿到token吧，那就相当于不认证了。通过在harbor中打印日志的方式，发现docker在请求token时带着一个basicauth的header：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Authorization: Basic xxxx
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Xxxx是一个base64编码后的字符串，编码前的格式是username:password，而这组用户名密码，其实是docker login的时候使用的。之后的流程不再赘述，完整的流程如下：&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;Docker client发起一个login请求，使用basicauth的方式携带用户名密码&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Registry返回401 Unauthorized和接下来如何认证的信息&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Docker使用registry提供的认证方法获取token&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;认证服务返回一个token&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;docker login成功，docker将认证信息存储到本地文件&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Docker client发起一个pull请求，根据registry的地址找到存储在本地的用户名密码并以basicauth的方式携带&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Registry返回401 Unauthorized和接下来如何认证的信息&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Docker使用registry提供的认证方法获取token&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;认证服务返回一个token&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Docker将token以bearer token的方式放在header中再次发起第6步的请求&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Registry对token进行验证通过后开始pull流程&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;
-</description>
-      
+      <description>docker registry 认证流程 参考： https://docs.docker.com/registry/spec/auth/token/ 最近在使用harbor的过程中，定位了一个docker认证相关的问题，期间因为对docker registry的认证流程不</description>
     </item>
     
   </channel>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>kubernetes on Even - A super concise theme for Hugo</title>
+    <link>https://kevinfeng.github.io/categories/kubernetes/</link>
+    <description>Recent content in kubernetes on Even - A super concise theme for Hugo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 17 Oct 2019 10:46:42 +0800</lastBuildDate>
+    
+	<atom:link href="https://kevinfeng.github.io/categories/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Kubernetes Service Discovery in Prometheus</title>
+      <link>https://kevinfeng.github.io/post/kubernetes-sd-in-prometheus/</link>
+      <pubDate>Thu, 17 Oct 2019 10:46:42 +0800</pubDate>
+      
+      <guid>https://kevinfeng.github.io/post/kubernetes-sd-in-prometheus/</guid>
+      <description>Prometheus seems to be the most popular monitoring system for kubernetes these days. It is impossibile for us to use static scrape targets in prometheus config for kubernetes metrics, as things varies all the time in kubernetes. That&amp;rsquo;s where service discovery comes in.
+Prometheus provides service discovery for kubernetes node, service, pod, endpoint and ingress. Take pod as example, we can pull from all the pods in kubernetes by put this in config:</description>
+    </item>
+    
+  </channel>
+</rss>
