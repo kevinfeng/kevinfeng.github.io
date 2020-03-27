@@ -135,7 +135,23 @@ Find me on GitHub."/>
   </div>
 </article>
         </div>
-        
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2017-08-20 21:38:52 \x2b0800 CST',
+        title: 'About',
+        clientID: '3ec0018c167243232e35',
+        clientSecret: 'bbef6a8ba1ac5b368fa2584594dddaf1b2c83b47',
+        repo: 'kevinfeng.github.io',
+        owner: 'kevinfeng',
+        admin: ['kevinfeng'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
 
   
 
