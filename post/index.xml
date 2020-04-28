@@ -6,10 +6,19 @@
     <description>Recent content in Posts on Even - A super concise theme for Hugo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 17 Oct 2019 10:46:42 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 28 Apr 2020 16:52:00 +0800</lastBuildDate>
     
 	<atom:link href="https://kevinfeng.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Thanos在TKEStack中的实践</title>
+      <link>https://kevinfeng.github.io/post/thanos-in-tkestack/</link>
+      <pubDate>Tue, 28 Apr 2020 16:52:00 +0800</pubDate>
+      
+      <guid>https://kevinfeng.github.io/post/thanos-in-tkestack/</guid>
+      <description>本文主要介绍Thanos在TKEStack中的应用和实践。Thanos是一个CNCF沙箱项目，旨在提供Prometheus的增强功能，包括全</description>
+    </item>
     
     <item>
       <title>Kubernetes Service Discovery in Prometheus</title>

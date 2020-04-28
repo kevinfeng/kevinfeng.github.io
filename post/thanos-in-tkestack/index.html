@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Thanos在TKEStack中的实践 - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="feng kun" /><meta name="description" content="本文主要介绍Thanos在TKEStack中的应用和实践。Thanos是一个CNCF沙箱项目，旨在提供Prometheus的增强功能，包括全" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.55.6 with theme even" />
+
+
+<link rel="canonical" href="https://kevinfeng.github.io/post/thanos-in-tkestack/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Thanos在TKEStack中的实践" />
+<meta property="og:description" content="本文主要介绍Thanos在TKEStack中的应用和实践。Thanos是一个CNCF沙箱项目，旨在提供Prometheus的增强功能，包括全" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kevinfeng.github.io/post/thanos-in-tkestack/" />
+<meta property="article:published_time" content="2020-04-28T16:52:00&#43;08:00"/>
+<meta property="article:modified_time" content="2020-04-28T16:52:00&#43;08:00"/>
+
+<meta itemprop="name" content="Thanos在TKEStack中的实践">
+<meta itemprop="description" content="本文主要介绍Thanos在TKEStack中的应用和实践。Thanos是一个CNCF沙箱项目，旨在提供Prometheus的增强功能，包括全">
+
+
+<meta itemprop="datePublished" content="2020-04-28T16:52:00&#43;08:00" />
+<meta itemprop="dateModified" content="2020-04-28T16:52:00&#43;08:00" />
+<meta itemprop="wordCount" content="3929">
+
+
+
+<meta itemprop="keywords" content="prometheus,kubernetes," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Thanos在TKEStack中的实践"/>
+<meta name="twitter:description" content="本文主要介绍Thanos在TKEStack中的应用和实践。Thanos是一个CNCF沙箱项目，旨在提供Prometheus的增强功能，包括全"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">FK</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">FK</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Thanos在TKEStack中的实践</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-04-28 </span>
+        <div class="post-category">
+            <a href="/categories/prometheus/"> prometheus </a>
+            <a href="/categories/kubernetes/"> kubernetes </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#thanos整体架构">Thanos整体架构</a></li>
+<li><a href="#sidecar模式在tkestack中的问题">Sidecar模式在TKEStack中的问题</a></li>
+<li><a href="#thanos在tkestack中的实际部署">Thanos在TKEStack中的实际部署</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<p>本文主要介绍<a href="https://thanos.io/">Thanos</a>在<a href="https://github.com/tkestack/tke">TKEStack</a>中的应用和实践。Thanos是一个CNCF沙箱项目，旨在提供Prometheus的增强功能，包括全局视角、高可用、历史数据查询等功能。TKE(Tencent Kubernetes Engine)是腾讯云容器服务的简称，TKEStack是其开源版本，致力于提供一个支持多租户多集群的原生Kubernetes容器平台。</p>
+
+<p>在Kubernetes监控场景下，Prometheus已经成为事实上的标准，TKEStack也不例外，其监控功能完全基于Prometheus构建。然而Prometheus对于高可用、全局视角以及历史数据存储没有一套完整的解决方案，为了解决这些问题，多个开源项目应运而生，Thanos就是其中一个。接下来我们首先介绍Thanos整体架构，然后讨论一下现有架构在TKEStack中遇到的问题，最后以TKEStack为例看Thanos的真实案例。</p>
+
+<h1 id="thanos整体架构">Thanos整体架构</h1>
+
+<p>这是Thanos官网给出的整体架构图：</p>
+
+<p><img src="https://thanos.io/img/arch.jpg" alt="architecture overview" /></p>
+
+<p>为了解决历史数据查询问题，需要将Prometheus本地的数据收集到一个长期存储中，而Prometheus的tsdb数据是以一个一个的block的形式存在，天然适合对象存储的方式，因此Thanos选择了对象存储，目前已支持各大云计算厂商的对应产品。但是Prometheus本身不支持把数据写到对象存储中，这个时候其实有两种思路：</p>
+
+<ol>
+<li>使用另一个组件，将Prometheus写到本地存储中的数据上传到对象存储</li>
+<li>利用Prometheus 的remote write功能，将数据复制一份到一个中转服务，再由中转服务上传至对象存储中</li>
+</ol>
+
+<p>Thanos选择的是第一种方案，即sidecar模式（为了解决sidecar模式的问题，Thanos也根据方案二准备了receive模式，还未正式发布，后文会介绍）。Sidecar是作为辅助容器运行在Prometheus的pod中，直接读取tsdb上传block到对象存储，至此解决了数据的长期存储问题。那么对象存储中的历史数据如何查询呢？很自然的想到需要一个组件能读取对象存储的数据并解析，最后根据用户的查询请求返回对应的时间序列，这个组件就是Thanos store gateway。</p>
+
+<p>第二个需求是全局视角，即用户希望从同一个入口查询到所有的Prometheus实例及其历史数据。一个简单的方案就是提供一个组件，将用户请求转发到所有的Prometheus以及Thanos store gateway，再汇总数据返回给用户。Thanos query组件就是采用了类似的方案，不过为了性能考虑，Thanos query并没有直接对接Prometheus的HTTP APi，而是对接了由sidecar暴露的gRPC API，这个API在Thanos中叫做store API。这个API在Thanos中使用广泛，前文提到的store gateway对外也是提供这个API。这样的好处是对Thanos query来说，不论是Prometheus还是对象存储，都是一个个提供了store API的endpoint，在逻辑上完全等价的，不需要做特殊处理。</p>
+
+<p>最后是高可用，Prometheus的高可用方案比较简单，就是启动多个相同配置的实例，这个时候带来的问题是数据出现重复，因此查询需要能够支持去重。因为Thanos query具有全局视角，去重的实现就比较容易了。只需要给每组互为备份的Prometheus打上用于区分的label，在query的查询阶段就可以根据label来将重复数据过滤。比如给两个Prometheus分别打上label replica=0，replica=1，当获取的数据中两个series仅仅是replica这个label不同，就可以认为这两个series是重复的，只返回其中一个即可。</p>
+
+<p>Thanos sidecar，query和store gateway，这三个组件就组成了Thanos的核心，另外还有Rule组件可以基于全局数据告警，以及Compact组件用来合并对象存储上的小block和提供downsampling功能，这两个组件的功能不是必须的，这里就不再详细介绍。</p>
+
+<h1 id="sidecar模式在tkestack中的问题">Sidecar模式在TKEStack中的问题</h1>
+
+<p>在分析sidecar模式的问题前，先简单介绍一下TKEStack的整体架构：</p>
+
+<p><img src="https://github.com/tkestack/tke/raw/master/docs/images/TKEStackHighLevelArchitecture@2x.png" alt="Architecture Of TKE" /></p>
+
+<p>Global集群作为管理集群，运行着TKEStack的各个服务，用来管理其他所有业务集群。对于监控系统来说，Prometheus运行在业务集群中，用来收集监控数据；Thanos各组件都运行在global集群，TKEStack的控制台通过Thanos query获取各个集群的监控数据并展示。看起来整体架构是OK的，但在实际使用中我们遇到下面的问题：</p>
+
+<ol>
+<li>Thanos query连接哪些store API endpoint是由其配置文件决定的，这些endpoint如果有新增、变更或者删除都需要更新配置文件。因为集群会不断新增、变化或者删除，endpoint的变化不可避免，这就导致了运维自动化的困难。Thanos官方提供了一种解决方案是利用consul做服务发现来代替配置文件更新，但这样又需要引入consul这个组件，增加了运维管理的成本和难度</li>
+<li>Prometheus的高可用变得非常重要。Prometheus本地的数据分为两种，一种是已经固化的block，还有一种是正在写入的WAL。其中WAL中存储的是当前最新的数据，这部分数据会不断变化，而超过一定时限的数据会固化为block，block是只读的。因为对象存储的不可修改特性，Thanos sidecar只能上传已经固化的block，因此对象存储中其实永远没有最新的这部分数据，这些数据都在一个个的Prometheus的WAL中。为了保证这些最新数据的可靠性，Prometheus要么使用共享存储，要么部署多实例，这些方案有的会增加运维复杂度，有的会增加几倍的数据存储消耗以及内存消耗（大规模k8s集群中Prometheus的内存消耗相当可观）。</li>
+</ol>
+
+<p>为了解决以上问题，我们尝试寻找利用Prometheus remote write的解决方案，发现Thanos社区已经提出了receive组件，该组件能较好的解决上面的两个问题。使用Thanos receive后，整体的架构如下：</p>
+
+<p><img src="https://kevinfeng.github.io/tkestack-thanos-arch.png" alt="tkestack-thanos-arch" /></p>
+
+<p>Receive组件实现了remote write接口，Prometheus可以将数据实时推送到Receive上；Receive本身实际上相当于一个没有收集功能的Prometheus，它接受到的数据同样通过tsdb写到本地WAL，然后超过一定时限后生成block，这些block会上传到对象存储。这样处理的结果是，最新的数据在receive组件上可以获取到，Prometheus的最新数据如果丢失并不影响，因此Prometheus的高可用性可以适当降低。同时因为query和receive部署在同一个k8s集群中，可以使用k8s的dnssrv功能做服务发现，receive组件的变化本身也比较少，这样就比较好的解决了第一个问题。</p>
+
+<p>Receive组件本身的高可用也有一定的支持，目前可以使用hashring的方式组织多个Receive实例来实现分布式服务，具体的配置将在下一节详细介绍。</p>
+
+<h1 id="thanos在tkestack中的实际部署">Thanos在TKEStack中的实际部署</h1>
+
+<p>核心组件是Thanos receive，使用statefulset部署多个实例，每个实例都使用hostpath本地存储。Receive组件可以通过hashring实现多副本冗余，下面的例子中为了节省存储空间没有做多副本配置:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>ConfigMap<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>thanos-receive-hashrings<span class="w">
+</span><span class="w">  </span>namespace<span class="p">:</span><span class="w"> </span>kube-system<span class="w">
+</span><span class="w"></span>data<span class="p">:</span><span class="w">
+</span><span class="w">  </span>thanos-receive-hashrings<span class="p">:</span><span class="w"> </span><span class="sd">|
+</span><span class="sd">    [</span><span class="w">
+</span><span class="w">      </span>{<span class="w">
+</span><span class="w">        </span><span class="s2">&#34;hashring&#34;</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;soft-tenants&#34;</span><span class="p">,</span><span class="w">
+</span><span class="w">        </span><span class="s2">&#34;endpoints&#34;</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="p">[</span><span class="w">
+</span><span class="w">          </span><span class="s2">&#34;thanos-receive-0.thanos-receive.kube-system.svc.cluster.local:10901&#34;</span><span class="p">,</span><span class="w">
+</span><span class="w">          </span><span class="s2">&#34;thanos-receive-1.thanos-receive.kube-system.svc.cluster.local:10901&#34;</span><span class="p">,</span><span class="w">
+</span><span class="w">          </span><span class="s2">&#34;thanos-receive-2.thanos-receive.kube-system.svc.cluster.local:10901&#34;</span><span class="w">
+</span><span class="w">        </span><span class="p">]</span><span class="w">
+</span><span class="w">      </span>}<span class="w">
+</span><span class="w">    </span><span class="p">]</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>Hashring中配置了3个节点，节点的地址是利用了k8s的dnssrv通过headless service实现的，接下来准备对象存储配置文件，这里我们采用了腾讯云COS：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">type: COS
+config:
+  bucket: &#34;tkestack&#34;
+  region: &#34;ap-shanghai&#34;
+  app_id: &#34;xxxxxx&#34;
+  secret_key: &#34;xxxxxx&#34;
+  secret_id: &#34;xxxxxxx&#34;</pre></td></tr></table>
+</div>
+</div>
+<p>将以上信息写到thanos-object.yaml，创建对应的secret：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create secret generic thanos-objstore-config -n kube-system --from-file<span class="o">=</span>thanos-object.yaml</code></pre></td></tr></table>
+</div>
+</div>
+<p>创建statefulset，注意receive.local-endpoint参数务必和hashring中的endpoint一致，receive需要根据这个判断自己在hashring中的位置：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span><span class="lnt">86
+</span><span class="lnt">87
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>apps/v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>StatefulSet<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>kubernetes.io/name<span class="p">:</span><span class="w"> </span>thanos-receive<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>thanos-receive<span class="w">
+</span><span class="w">  </span>namespace<span class="p">:</span><span class="w"> </span>kube-system<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>replicas<span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
+</span><span class="w">  </span>selector<span class="p">:</span><span class="w">
+</span><span class="w">    </span>matchLabels<span class="p">:</span><span class="w">
+</span><span class="w">      </span>kubernetes.io/name<span class="p">:</span><span class="w"> </span>thanos-receive<span class="w">
+</span><span class="w">  </span>serviceName<span class="p">:</span><span class="w"> </span>thanos-receive<span class="w">
+</span><span class="w">  </span>template<span class="p">:</span><span class="w">
+</span><span class="w">    </span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">      </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">        </span>kubernetes.io/name<span class="p">:</span><span class="w"> </span>thanos-receive<span class="w">
+</span><span class="w">    </span>spec<span class="p">:</span><span class="w">
+</span><span class="w">      </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">      </span>-<span class="w"> </span>args<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>receive<span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>--grpc-address=<span class="m">0.0</span>.<span class="m">0.0</span><span class="p">:</span><span class="m">10901</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>--http-address=<span class="m">0.0</span>.<span class="m">0.0</span><span class="p">:</span><span class="m">10902</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>--remote-write.address=<span class="m">0.0</span>.<span class="m">0.0</span><span class="p">:</span><span class="m">19291</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>--objstore.config=$(OBJSTORE_CONFIG)<span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>--tsdb.path=/var/thanos/receive<span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>--tsdb.retention=2h<span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>--label=replica=<span class="s2">&#34;$(NAME)&#34;</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>--label=receive=<span class="s2">&#34;true&#34;</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>--receive.hashrings-file=/etc/thanos/thanos-receive-hashrings<span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>--receive.local-endpoint=$(NAME).thanos-receive.kube-system.svc.cluster.local<span class="p">:</span><span class="m">10901</span><span class="w">
+</span><span class="w">        </span>env<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>NAME<span class="w">
+</span><span class="w">          </span>valueFrom<span class="p">:</span><span class="w">
+</span><span class="w">            </span>fieldRef<span class="p">:</span><span class="w">
+</span><span class="w">              </span>fieldPath<span class="p">:</span><span class="w"> </span>metadata.name<span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>OBJSTORE_CONFIG<span class="w">
+</span><span class="w">          </span>valueFrom<span class="p">:</span><span class="w">
+</span><span class="w">            </span>secretKeyRef<span class="p">:</span><span class="w">
+</span><span class="w">              </span>key<span class="p">:</span><span class="w"> </span>thanos-object.yaml<span class="w">
+</span><span class="w">              </span>name<span class="p">:</span><span class="w"> </span>thanos-objstore-config<span class="w">
+</span><span class="w">        </span>image<span class="p">:</span><span class="w"> </span>thanosio/thanos<span class="p">:</span>v0.<span class="m">11.0</span><span class="w">
+</span><span class="w">        </span>livenessProbe<span class="p">:</span><span class="w">
+</span><span class="w">          </span>failureThreshold<span class="p">:</span><span class="w"> </span><span class="m">100</span><span class="w">
+</span><span class="w">          </span>httpGet<span class="p">:</span><span class="w">
+</span><span class="w">            </span>path<span class="p">:</span><span class="w"> </span>/-/healthy<span class="w">
+</span><span class="w">            </span>port<span class="p">:</span><span class="w"> </span><span class="m">10902</span><span class="w">
+</span><span class="w">            </span>scheme<span class="p">:</span><span class="w"> </span>HTTP<span class="w">
+</span><span class="w">          </span>periodSeconds<span class="p">:</span><span class="w"> </span><span class="m">30</span><span class="w">
+</span><span class="w">        </span>name<span class="p">:</span><span class="w"> </span>thanos-receive<span class="w">
+</span><span class="w">        </span>ports<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>containerPort<span class="p">:</span><span class="w"> </span><span class="m">10901</span><span class="w">
+</span><span class="w">          </span>name<span class="p">:</span><span class="w"> </span>grpc<span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>containerPort<span class="p">:</span><span class="w"> </span><span class="m">10902</span><span class="w">
+</span><span class="w">          </span>name<span class="p">:</span><span class="w"> </span>http<span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>containerPort<span class="p">:</span><span class="w"> </span><span class="m">19291</span><span class="w">
+</span><span class="w">          </span>name<span class="p">:</span><span class="w"> </span>remote-write<span class="w">
+</span><span class="w">        </span>readinessProbe<span class="p">:</span><span class="w">
+</span><span class="w">          </span>httpGet<span class="p">:</span><span class="w">
+</span><span class="w">            </span>path<span class="p">:</span><span class="w"> </span>/-/ready<span class="w">
+</span><span class="w">            </span>port<span class="p">:</span><span class="w"> </span><span class="m">10902</span><span class="w">
+</span><span class="w">            </span>scheme<span class="p">:</span><span class="w"> </span>HTTP<span class="w">
+</span><span class="w">          </span>initialDelaySeconds<span class="p">:</span><span class="w"> </span><span class="m">30</span><span class="w">
+</span><span class="w">          </span>periodSeconds<span class="p">:</span><span class="w"> </span><span class="m">30</span><span class="w">
+</span><span class="w">        </span>resources<span class="p">:</span><span class="w">
+</span><span class="w">          </span>limits<span class="p">:</span><span class="w">
+</span><span class="w">            </span>cpu<span class="p">:</span><span class="w"> </span><span class="s2">&#34;8&#34;</span><span class="w">
+</span><span class="w">            </span>memory<span class="p">:</span><span class="w"> </span>48Gi<span class="w">
+</span><span class="w">          </span>requests<span class="p">:</span><span class="w">
+</span><span class="w">            </span>cpu<span class="p">:</span><span class="w"> </span><span class="s2">&#34;4&#34;</span><span class="w">
+</span><span class="w">            </span>memory<span class="p">:</span><span class="w"> </span>8Gi<span class="w">
+</span><span class="w">        </span>volumeMounts<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>mountPath<span class="p">:</span><span class="w"> </span>/var/thanos/receive<span class="w">
+</span><span class="w">          </span>name<span class="p">:</span><span class="w"> </span>thanos-receive-data<span class="w">
+</span><span class="w">          </span>readOnly<span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>mountPath<span class="p">:</span><span class="w"> </span>/etc/thanos/<span class="w">
+</span><span class="w">          </span>name<span class="p">:</span><span class="w"> </span>thanos-receive-hashrings<span class="w">
+</span><span class="w">      </span>terminationGracePeriodSeconds<span class="p">:</span><span class="w"> </span><span class="m">120</span><span class="w">
+</span><span class="w">      </span>volumes<span class="p">:</span><span class="w">
+</span><span class="w">      </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>thanos-receive-data<span class="w">
+</span><span class="w">        </span>hostPath<span class="p">:</span><span class="w">
+</span><span class="w">          </span>path<span class="p">:</span><span class="w"> </span>/data/thanos-receive<span class="w">
+</span><span class="w">          </span>type<span class="p">:</span><span class="w"> </span>DirectoryOrCreate<span class="w">
+</span><span class="w">      </span>-<span class="w"> </span>configMap<span class="p">:</span><span class="w">
+</span><span class="w">          </span>defaultMode<span class="p">:</span><span class="w"> </span><span class="m">420</span><span class="w">
+</span><span class="w">          </span>name<span class="p">:</span><span class="w"> </span>thanos-receive-hashrings<span class="w">
+</span><span class="w">        </span>name<span class="p">:</span><span class="w"> </span>thanos-receive-hashrings</code></pre></td></tr></table>
+</div>
+</div>
+<p>创建两个service，分别用于query和Prometheus的访问：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Service<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>annotations<span class="p">:</span><span class="w">
+</span><span class="w">    </span>prometheus.io/port<span class="p">:</span><span class="w"> </span><span class="s2">&#34;10902&#34;</span><span class="w">
+</span><span class="w">    </span>prometheus.io/scrape<span class="p">:</span><span class="w"> </span><span class="s2">&#34;false&#34;</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>kubernetes.io/cluster-service<span class="p">:</span><span class="w"> </span><span class="s2">&#34;true&#34;</span><span class="w">
+</span><span class="w">    </span>kubernetes.io/name<span class="p">:</span><span class="w"> </span>thanos-receive<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>thanos-receive<span class="w">
+</span><span class="w">  </span>namespace<span class="p">:</span><span class="w"> </span>kube-system<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>ports<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>http<span class="w">
+</span><span class="w">    </span>port<span class="p">:</span><span class="w"> </span><span class="m">10902</span><span class="w">
+</span><span class="w">    </span>protocol<span class="p">:</span><span class="w"> </span>TCP<span class="w">
+</span><span class="w">    </span>targetPort<span class="p">:</span><span class="w"> </span><span class="m">10902</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>remote-write<span class="w">
+</span><span class="w">    </span>port<span class="p">:</span><span class="w"> </span><span class="m">19291</span><span class="w">
+</span><span class="w">    </span>protocol<span class="p">:</span><span class="w"> </span>TCP<span class="w">
+</span><span class="w">    </span>targetPort<span class="p">:</span><span class="w"> </span><span class="m">19291</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>grpc<span class="w">
+</span><span class="w">    </span>port<span class="p">:</span><span class="w"> </span><span class="m">10901</span><span class="w">
+</span><span class="w">    </span>protocol<span class="p">:</span><span class="w"> </span>TCP<span class="w">
+</span><span class="w">    </span>targetPort<span class="p">:</span><span class="w"> </span><span class="m">10901</span><span class="w">
+</span><span class="w">  </span>selector<span class="p">:</span><span class="w">
+</span><span class="w">    </span>kubernetes.io/name<span class="p">:</span><span class="w"> </span>thanos-receive<span class="w">
+</span><span class="w">  </span>clusterIP<span class="p">:</span><span class="w"> </span>None<span class="w">
+</span><span class="w"></span>-----------------------<span class="w">
+</span><span class="w"></span>apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Service<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>kubernetes.io/cluster-service<span class="p">:</span><span class="w"> </span><span class="s2">&#34;true&#34;</span><span class="w">
+</span><span class="w">    </span>kubernetes.io/name<span class="p">:</span><span class="w"> </span>thanos-receive-nodeport<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>thanos-receive-nodeport<span class="w">
+</span><span class="w">  </span>namespace<span class="p">:</span><span class="w"> </span>kube-system<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>ports<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>http<span class="w">
+</span><span class="w">    </span>port<span class="p">:</span><span class="w"> </span><span class="m">10902</span><span class="w">
+</span><span class="w">    </span>protocol<span class="p">:</span><span class="w"> </span>TCP<span class="w">
+</span><span class="w">    </span>targetPort<span class="p">:</span><span class="w"> </span><span class="m">10902</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>remote-write<span class="w">
+</span><span class="w">    </span>port<span class="p">:</span><span class="w"> </span><span class="m">19291</span><span class="w">
+</span><span class="w">    </span>protocol<span class="p">:</span><span class="w"> </span>TCP<span class="w">
+</span><span class="w">    </span>targetPort<span class="p">:</span><span class="w"> </span><span class="m">19291</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>grpc<span class="w">
+</span><span class="w">    </span>port<span class="p">:</span><span class="w"> </span><span class="m">10901</span><span class="w">
+</span><span class="w">    </span>protocol<span class="p">:</span><span class="w"> </span>TCP<span class="w">
+</span><span class="w">    </span>targetPort<span class="p">:</span><span class="w"> </span><span class="m">10901</span><span class="w">
+</span><span class="w">  </span>selector<span class="p">:</span><span class="w">
+</span><span class="w">    </span>kubernetes.io/name<span class="p">:</span><span class="w"> </span>thanos-receive<span class="w">
+</span><span class="w">  </span>type<span class="p">:</span><span class="w"> </span>NodePort</code></pre></td></tr></table>
+</div>
+</div>
+<p>注意第一个service是headless service（clusterIP: None），第二个service是nodeport类型，便于跨集群访问。接下来是store-gateway：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span><span class="lnt">86
+</span><span class="lnt">87
+</span><span class="lnt">88
+</span><span class="lnt">89
+</span><span class="lnt">90
+</span><span class="lnt">91
+</span><span class="lnt">92
+</span><span class="lnt">93
+</span><span class="lnt">94
+</span><span class="lnt">95
+</span><span class="lnt">96
+</span><span class="lnt">97
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>apps/v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>StatefulSet<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>app.kubernetes.io/component<span class="p">:</span><span class="w"> </span>object-store-gateway<span class="w">
+</span><span class="w">    </span>app.kubernetes.io/instance<span class="p">:</span><span class="w"> </span>thanos-store<span class="w">
+</span><span class="w">    </span>app.kubernetes.io/name<span class="p">:</span><span class="w"> </span>thanos-store<span class="w">
+</span><span class="w">    </span>app.kubernetes.io/version<span class="p">:</span><span class="w"> </span>v0.<span class="m">11.0</span><span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>thanos-store<span class="w">
+</span><span class="w">  </span>namespace<span class="p">:</span><span class="w"> </span>kube-system<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>replicas<span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">  </span>selector<span class="p">:</span><span class="w">
+</span><span class="w">    </span>matchLabels<span class="p">:</span><span class="w">
+</span><span class="w">      </span>app.kubernetes.io/component<span class="p">:</span><span class="w"> </span>object-store-gateway<span class="w">
+</span><span class="w">      </span>app.kubernetes.io/instance<span class="p">:</span><span class="w"> </span>thanos-store<span class="w">
+</span><span class="w">      </span>app.kubernetes.io/name<span class="p">:</span><span class="w"> </span>thanos-store<span class="w">
+</span><span class="w">  </span>serviceName<span class="p">:</span><span class="w"> </span>thanos-store<span class="w">
+</span><span class="w">  </span>template<span class="p">:</span><span class="w">
+</span><span class="w">    </span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">      </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">        </span>app.kubernetes.io/component<span class="p">:</span><span class="w"> </span>object-store-gateway<span class="w">
+</span><span class="w">        </span>app.kubernetes.io/instance<span class="p">:</span><span class="w"> </span>thanos-store<span class="w">
+</span><span class="w">        </span>app.kubernetes.io/name<span class="p">:</span><span class="w"> </span>thanos-store<span class="w">
+</span><span class="w">        </span>app.kubernetes.io/version<span class="p">:</span><span class="w"> </span>v0.<span class="m">11.0</span><span class="w">
+</span><span class="w">    </span>spec<span class="p">:</span><span class="w">
+</span><span class="w">      </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">      </span>-<span class="w"> </span>args<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>store<span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>--data-dir=/var/thanos/store<span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>--grpc-address=<span class="m">0.0</span>.<span class="m">0.0</span><span class="p">:</span><span class="m">10901</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>--http-address=<span class="m">0.0</span>.<span class="m">0.0</span><span class="p">:</span><span class="m">10902</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>--objstore.config=$(OBJSTORE_CONFIG)<span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>--experimental.enable-index-header<span class="w">
+</span><span class="w">        </span>env<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>OBJSTORE_CONFIG<span class="w">
+</span><span class="w">          </span>valueFrom<span class="p">:</span><span class="w">
+</span><span class="w">            </span>secretKeyRef<span class="p">:</span><span class="w">
+</span><span class="w">              </span>key<span class="p">:</span><span class="w"> </span>thanos-object.yaml<span class="w">
+</span><span class="w">              </span>name<span class="p">:</span><span class="w"> </span>thanos-objstore-config<span class="w">
+</span><span class="w">        </span>image<span class="p">:</span><span class="w"> </span>thanosio/thanos<span class="p">:</span>v0.<span class="m">11.0</span><span class="w">
+</span><span class="w">        </span>livenessProbe<span class="p">:</span><span class="w">
+</span><span class="w">          </span>failureThreshold<span class="p">:</span><span class="w"> </span><span class="m">8</span><span class="w">
+</span><span class="w">          </span>httpGet<span class="p">:</span><span class="w">
+</span><span class="w">            </span>path<span class="p">:</span><span class="w"> </span>/-/healthy<span class="w">
+</span><span class="w">            </span>port<span class="p">:</span><span class="w"> </span><span class="m">10902</span><span class="w">
+</span><span class="w">            </span>scheme<span class="p">:</span><span class="w"> </span>HTTP<span class="w">
+</span><span class="w">          </span>periodSeconds<span class="p">:</span><span class="w"> </span><span class="m">30</span><span class="w">
+</span><span class="w">        </span>name<span class="p">:</span><span class="w"> </span>thanos-store<span class="w">
+</span><span class="w">        </span>ports<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>containerPort<span class="p">:</span><span class="w"> </span><span class="m">10901</span><span class="w">
+</span><span class="w">          </span>name<span class="p">:</span><span class="w"> </span>grpc<span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>containerPort<span class="p">:</span><span class="w"> </span><span class="m">10902</span><span class="w">
+</span><span class="w">          </span>name<span class="p">:</span><span class="w"> </span>http<span class="w">
+</span><span class="w">        </span>readinessProbe<span class="p">:</span><span class="w">
+</span><span class="w">          </span>failureThreshold<span class="p">:</span><span class="w"> </span><span class="m">20</span><span class="w">
+</span><span class="w">          </span>httpGet<span class="p">:</span><span class="w">
+</span><span class="w">            </span>path<span class="p">:</span><span class="w"> </span>/-/ready<span class="w">
+</span><span class="w">            </span>port<span class="p">:</span><span class="w"> </span><span class="m">10902</span><span class="w">
+</span><span class="w">            </span>scheme<span class="p">:</span><span class="w"> </span>HTTP<span class="w">
+</span><span class="w">          </span>periodSeconds<span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="w">
+</span><span class="w">        </span>terminationMessagePolicy<span class="p">:</span><span class="w"> </span>FallbackToLogsOnError<span class="w">
+</span><span class="w">        </span>volumeMounts<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>mountPath<span class="p">:</span><span class="w"> </span>/var/thanos/store<span class="w">
+</span><span class="w">          </span>name<span class="p">:</span><span class="w"> </span>data<span class="w">
+</span><span class="w">          </span>readOnly<span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="w">      </span>terminationGracePeriodSeconds<span class="p">:</span><span class="w"> </span><span class="m">120</span><span class="w">
+</span><span class="w">      </span>nodeName<span class="p">:</span><span class="w"> </span>testnode<span class="w">
+</span><span class="w">      </span>volumes<span class="p">:</span><span class="w">
+</span><span class="w">      </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>data<span class="w">
+</span><span class="w">        </span>hostPath<span class="p">:</span><span class="w">
+</span><span class="w">          </span>path<span class="p">:</span><span class="w"> </span>/data/thanos-store<span class="w">
+</span><span class="w">          </span>type<span class="p">:</span><span class="w"> </span>DirectoryOrCreate<span class="w">
+</span><span class="w"></span>--------------------------------------------<span class="w">
+</span><span class="w"></span>apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Service<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>app.kubernetes.io/component<span class="p">:</span><span class="w"> </span>object-store-gateway<span class="w">
+</span><span class="w">    </span>app.kubernetes.io/instance<span class="p">:</span><span class="w"> </span>thanos-store<span class="w">
+</span><span class="w">    </span>app.kubernetes.io/name<span class="p">:</span><span class="w"> </span>thanos-store<span class="w">
+</span><span class="w">    </span>app.kubernetes.io/version<span class="p">:</span><span class="w"> </span>v0.<span class="m">11.0</span><span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>thanos-store<span class="w">
+</span><span class="w">  </span>namespace<span class="p">:</span><span class="w"> </span>kube-system<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>clusterIP<span class="p">:</span><span class="w"> </span>None<span class="w">
+</span><span class="w">  </span>ports<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>grpc<span class="w">
+</span><span class="w">    </span>port<span class="p">:</span><span class="w"> </span><span class="m">10901</span><span class="w">
+</span><span class="w">    </span>targetPort<span class="p">:</span><span class="w"> </span><span class="m">10901</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>http<span class="w">
+</span><span class="w">    </span>port<span class="p">:</span><span class="w"> </span><span class="m">10902</span><span class="w">
+</span><span class="w">    </span>targetPort<span class="p">:</span><span class="w"> </span><span class="m">10902</span><span class="w">
+</span><span class="w">  </span>selector<span class="p">:</span><span class="w">
+</span><span class="w">    </span>app.kubernetes.io/component<span class="p">:</span><span class="w"> </span>object-store-gateway<span class="w">
+</span><span class="w">    </span>app.kubernetes.io/instance<span class="p">:</span><span class="w"> </span>thanos-store<span class="w">
+</span><span class="w">    </span>app.kubernetes.io/name<span class="p">:</span><span class="w"> </span>thanos-store</code></pre></td></tr></table>
+</div>
+</div>
+<p>Store gateway进行了简单处理，指定了node并使用hostpath，因为主要是为历史数据查询服务，对高可用的要求并不高。最后是thanos query：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>apps/v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Deployment<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>kubernetes.io/name<span class="p">:</span><span class="w"> </span>thanos-querier<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>thanos-querier<span class="w">
+</span><span class="w">  </span>namespace<span class="p">:</span><span class="w"> </span>kube-system<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>replicas<span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">  </span>selector<span class="p">:</span><span class="w">
+</span><span class="w">    </span>matchLabels<span class="p">:</span><span class="w">
+</span><span class="w">      </span>kubernetes.io/name<span class="p">:</span><span class="w"> </span>thanos-querier<span class="w">
+</span><span class="w">  </span>template<span class="p">:</span><span class="w">
+</span><span class="w">    </span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">      </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">        </span>kubernetes.io/name<span class="p">:</span><span class="w"> </span>thanos-querier<span class="w">
+</span><span class="w">    </span>spec<span class="p">:</span><span class="w">
+</span><span class="w">      </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">      </span>-<span class="w"> </span>args<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>query<span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>--query.replica-label=prometheus_replica<span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>--query.replica-label=replica<span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>--grpc-address=<span class="m">0.0</span>.<span class="m">0.0</span><span class="p">:</span><span class="m">10901</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>--http-address=<span class="m">0.0</span>.<span class="m">0.0</span><span class="p">:</span><span class="m">9090</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>--store=dnssrv+_grpc._tcp.thanos-store.kube-system.svc.cluster.local<span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>--store=dnssrv+_grpc._tcp.thanos-receive.kube-system.svc.cluster.local<span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>--query.replica-label=ruler_replica<span class="w">
+</span><span class="w">        </span>image<span class="p">:</span><span class="w"> </span>thanosio/thanos<span class="p">:</span>v0.<span class="m">11.0</span><span class="w">
+</span><span class="w">        </span>livenessProbe<span class="p">:</span><span class="w">
+</span><span class="w">          </span>failureThreshold<span class="p">:</span><span class="w"> </span><span class="m">4</span><span class="w">
+</span><span class="w">          </span>httpGet<span class="p">:</span><span class="w">
+</span><span class="w">            </span>path<span class="p">:</span><span class="w"> </span>/-/healthy<span class="w">
+</span><span class="w">            </span>port<span class="p">:</span><span class="w"> </span><span class="m">9090</span><span class="w">
+</span><span class="w">            </span>scheme<span class="p">:</span><span class="w"> </span>HTTP<span class="w">
+</span><span class="w">          </span>periodSeconds<span class="p">:</span><span class="w"> </span><span class="m">30</span><span class="w">
+</span><span class="w">        </span>name<span class="p">:</span><span class="w"> </span>thanos-querier<span class="w">
+</span><span class="w">        </span>ports<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>containerPort<span class="p">:</span><span class="w"> </span><span class="m">10901</span><span class="w">
+</span><span class="w">          </span>name<span class="p">:</span><span class="w"> </span>grpc<span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>containerPort<span class="p">:</span><span class="w"> </span><span class="m">9090</span><span class="w">
+</span><span class="w">          </span>name<span class="p">:</span><span class="w"> </span>http<span class="w">
+</span><span class="w">        </span>readinessProbe<span class="p">:</span><span class="w">
+</span><span class="w">          </span>httpGet<span class="p">:</span><span class="w">
+</span><span class="w">            </span>path<span class="p">:</span><span class="w"> </span>/-/ready<span class="w">
+</span><span class="w">            </span>port<span class="p">:</span><span class="w"> </span><span class="m">9090</span><span class="w">
+</span><span class="w">            </span>scheme<span class="p">:</span><span class="w"> </span>HTTP<span class="w">
+</span><span class="w">          </span>initialDelaySeconds<span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
+</span><span class="w">          </span>periodSeconds<span class="p">:</span><span class="w"> </span><span class="m">30</span><span class="w">
+</span><span class="w">        </span>resources<span class="p">:</span><span class="w">
+</span><span class="w">          </span>limits<span class="p">:</span><span class="w">
+</span><span class="w">            </span>cpu<span class="p">:</span><span class="w"> </span><span class="s2">&#34;4&#34;</span><span class="w">
+</span><span class="w">            </span>memory<span class="p">:</span><span class="w"> </span>8Gi<span class="w">
+</span><span class="w">          </span>requests<span class="p">:</span><span class="w">
+</span><span class="w">            </span>cpu<span class="p">:</span><span class="w"> </span><span class="s2">&#34;2&#34;</span><span class="w">
+</span><span class="w">            </span>memory<span class="p">:</span><span class="w"> </span>2Gi<span class="w">
+</span><span class="w">      </span>terminationGracePeriodSeconds<span class="p">:</span><span class="w"> </span><span class="m">120</span><span class="w">
+</span><span class="w"></span>--------------------------------<span class="w">
+</span><span class="w"></span>apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Service<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>kubernetes.io/name<span class="p">:</span><span class="w"> </span>thanos-querier<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>thanos-querier<span class="w">
+</span><span class="w">  </span>namespace<span class="p">:</span><span class="w"> </span>kube-system<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>ports<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>grpc<span class="w">
+</span><span class="w">    </span>port<span class="p">:</span><span class="w"> </span><span class="m">10901</span><span class="w">
+</span><span class="w">    </span>targetPort<span class="p">:</span><span class="w"> </span>grpc<span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>http<span class="w">
+</span><span class="w">    </span>port<span class="p">:</span><span class="w"> </span><span class="m">9090</span><span class="w">
+</span><span class="w">    </span>targetPort<span class="p">:</span><span class="w"> </span>http<span class="w">
+</span><span class="w">  </span>selector<span class="p">:</span><span class="w">
+</span><span class="w">    </span>kubernetes.io/name<span class="p">:</span><span class="w"> </span>thanos-querier</code></pre></td></tr></table>
+</div>
+</div>
+<p>最后修改Prometheus的remote write配置，将数据写入thanos receive的nodeport service暴露的接口中，整个监控的部署就完成了。</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">feng kun</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2020-04-28
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/prometheus/">prometheus</a>
+          <a href="/tags/kubernetes/">kubernetes</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/kubernetes-sd-in-prometheus/">
+            <span class="next-text nav-default">Kubernetes Service Discovery in Prometheus</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2020-04-28 16:52:00 \x2b0800 CST',
+        title: 'Thanos在TKEStack中的实践',
+        clientID: '3ec0018c167243232e35',
+        clientSecret: 'bbef6a8ba1ac5b368fa2584594dddaf1b2c83b47',
+        repo: 'kevinfeng.github.io',
+        owner: 'kevinfeng',
+        admin: ['kevinfeng'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:fengkun32@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/kevinfeng" class="iconfont icon-github" title="github"></a>
+  <a href="https://kevinfeng.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">feng kun</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

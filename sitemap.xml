@@ -10,13 +10,56 @@
   
   <url>
     <loc>https://kevinfeng.github.io/categories/</loc>
-    <lastmod>2019-10-17T10:46:42+08:00</lastmod>
+    <lastmod>2020-04-28T16:52:00+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://kevinfeng.github.io/</loc>
-    <lastmod>2019-10-17T10:46:42+08:00</lastmod>
+    <lastmod>2020-04-28T16:52:00+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://kevinfeng.github.io/post/</loc>
+    <lastmod>2020-04-28T16:52:00+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://kevinfeng.github.io/tags/</loc>
+    <lastmod>2020-04-28T16:52:00+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://kevinfeng.github.io/post/thanos-in-tkestack/</loc>
+    <lastmod>2020-04-28T16:52:00+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://kevinfeng.github.io/categories/kubernetes/</loc>
+    <lastmod>2020-04-28T16:52:00+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://kevinfeng.github.io/tags/kubernetes/</loc>
+    <lastmod>2020-04-28T16:52:00+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://kevinfeng.github.io/categories/prometheus/</loc>
+    <lastmod>2020-04-28T16:52:00+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://kevinfeng.github.io/tags/prometheus/</loc>
+    <lastmod>2020-04-28T16:52:00+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -25,42 +68,6 @@
     <lastmod>2019-10-17T10:46:42+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://kevinfeng.github.io/post/</loc>
-    <lastmod>2019-10-17T10:46:42+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://kevinfeng.github.io/tags/</loc>
-    <lastmod>2019-10-17T10:46:42+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://kevinfeng.github.io/categories/kubernetes/</loc>
-    <lastmod>2019-10-17T10:46:42+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://kevinfeng.github.io/tags/kubernetes/</loc>
-    <lastmod>2019-10-17T10:46:42+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://kevinfeng.github.io/categories/prometheus/</loc>
-    <lastmod>2019-10-17T10:46:42+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://kevinfeng.github.io/tags/prometheus/</loc>
-    <lastmod>2019-10-17T10:46:42+08:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
